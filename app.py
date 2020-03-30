@@ -1,5 +1,10 @@
+import pyowm
 from flask import Flask, request
 from twilio.twiml.messaging_response import MessagingResponse
+
+OWM_API_KEY = "fb73a0711f6108aa9ebf5046d4851139"
+
+owm = pyowm.OWM(OWM_API_KEY)
 
 app = Flask(__name__)
 
@@ -14,6 +19,10 @@ def sms_reply():
         lat = float(request.values.get('Latitude', None))
         lon = float(request.values.get('Longitude', None))
         resp.message("Got your location Latitude:" + str(lat) + "Longitude:" + str(lon))
+        obs = owm.weather_at_coords(lat,lon)
+        w = obs.get_weather()
+        temp = w.get_temperature('celsius')
+        resp.message("Current Temperature: " + str(temp['temp']) + "`C")
     else:
         resp.message("Couldn't get your location. Please send your current location.")
 
