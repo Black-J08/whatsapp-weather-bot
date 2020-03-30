@@ -9,13 +9,13 @@ def hello():
 
 @app.route("/sms", methods=['POST'])
 def sms_reply():
-    """Respond to incoming calls with a simple text message."""
-    # Fetch the message
-    msg = request.form.get('Body')
-
-    # Create reply
     resp = MessagingResponse()
-    resp.message("You said: {}".format(msg))
+    if request.values.get('Latitude'):
+        lat = float(request.values.get('Latitude', None))
+        lon = float(request.values.get('Longitude', None))
+        resp.message("Got your location Latitude:" + str(lat) + "Longitude:" + str(lon))
+    else:
+        resp.message("Couldn't get your location. Please send your current location.")
 
     return str(resp)
 
