@@ -22,7 +22,8 @@ def sms_reply():
         obs = owm.weather_at_coords(lat,lon)
         w = obs.get_weather()
         temp = w.get_temperature('celsius')
-        resp.message("Current Temperature: " + str(temp['temp']) + "`C")
+        status = str(w.get_detailed_status())
+        resp.message("Current Temperature: " + str(temp['temp']) + "`C\n" + status)
     else:
         resp.message("Couldn't get your location. Please send your current location.")
 
